@@ -1,6 +1,8 @@
 package com.liukai.datastructure.ch_05_array;
 
 /**
+ * 5-1 数组
+ * <p>
  * 1）、数组的插入、删除，按照下边随机访问操作；
  * 2）、数组中的数据类型是 int
  */
