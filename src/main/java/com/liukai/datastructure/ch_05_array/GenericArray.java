@@ -33,6 +33,27 @@ public class GenericArray<T> {
     this(10);
   }
 
+  public static void main(String[] args) {
+    GenericArray<Integer> array = new GenericArray<>();
+    array.addFirst(1);
+    array.addFirst(2);
+    array.addFirst(3);
+    array.addLast(4);
+    System.out.println(array);
+    System.out.println("数组是否为空：" + array.isEmpty());
+    array.add(4, 10);
+    System.out.println(array);
+
+    array.removeFirst();
+    System.out.println("removeFirst 后: " + array);
+    array.removeLast();
+    System.out.println("removeLast 后: " + array);
+
+    array.remove(2);
+    System.out.println("remove 后: " + array);
+
+  }
+
   /**
    * 获取数组容量
    *
@@ -148,7 +169,7 @@ public class GenericArray<T> {
    * @param e 元素
    */
   public void addLast(T e) {
-    add(this.size - 1, e);
+    add(this.size, e);
   }
 
   /**
@@ -223,6 +244,17 @@ public class GenericArray<T> {
     }
   }
 
+  @Override
+  public String toString() {
+
+    StringBuilder sb = new StringBuilder(
+      "当前数组的总容量为：" + this.data.length + "，元素数量为：" + this.size + ", 元素为：");
+    for (int i = 0; i < this.size; i++) {
+      sb.append(data[i] + ", ");
+    }
+    return sb.toString();
+  }
+
   /**
    * 检查索引的合法性
    *
@@ -236,7 +268,7 @@ public class GenericArray<T> {
 
   public void checkIndexForAdd(int index) {
     if (index < 0 || index > this.size) {
-      throw new IllegalArgumentException("插入失败，索引的范围应该是为： 0<=index<Array.getCount()");
+      throw new IllegalArgumentException("插入失败，索引的范围应该是为： 0 <= index <= " + this.size);
     }
   }
 
