@@ -55,9 +55,19 @@ public class SinglyLinkedList {
     linkedList.printAll();
 
     // 带头结点的链表反转
-    Node node = linkedList.inverseLinkedList_head(p);
+    // Node node = linkedList.inverseLinkedList_head(p);
+    // linkedList.printNode(node);
 
-    System.out.println(node);
+  }
+
+  public void printNode(Node p) {
+    StringBuilder sb = new StringBuilder("结点元素为：");
+    Node q = p;
+    while (q != null) {
+      sb.append(q.data).append(" ");
+      q = q.next;
+    }
+    System.out.println(sb);
   }
 
   /**
