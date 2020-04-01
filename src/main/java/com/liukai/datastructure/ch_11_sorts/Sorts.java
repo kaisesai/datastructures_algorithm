@@ -99,19 +99,30 @@ public class Sorts {
    * @param a 数组
    * @param n 数组大小
    */
-  public static void insertionSort2(int[] a, int n) {
-    if (n <= 1) {
-      return;
-    }
-    for (int i = 1; i < n; i++) {
-      int value = a[i];
-      int j = 0;
-      for (; j < i; j++) {
-        if (value < a[j]) {
+  public static void insertionSort2(int[] data, int n) {
+    for (int i = 1; i < data.length; i++) {
+      int value = data[i];
 
+      int[] tmp = new int[2];
+      int change = i;
+      for (int j = 0; j < i; j++) {
+        if (value >= data[j]) {
+          continue;
+        }
+
+        int index = j % 2;
+        if (change == i) {
+          tmp[Math.abs(index - 1)] = data[j];
+          change = j;
+        }
+        tmp[index] = data[j + 1];
+        if (0 == index) {
+          data[j + 1] = tmp[index + 1];
+        } else {
+          data[j + 1] = tmp[index - 1];
         }
       }
-
+      data[change] = value;
     }
   }
 
