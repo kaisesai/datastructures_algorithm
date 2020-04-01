@@ -31,7 +31,7 @@ public class QuickSort {
       return;
     }
     // 分区函数
-    int q = partition(arr, p, r);
+    int q = partition2(arr, p, r);
     // 递归排序
     quickSortC(arr, p, q - 1);
     quickSortC(arr, q + 1, r);
@@ -43,6 +43,25 @@ public class QuickSort {
     // 变量 i 将数组分为两部分，A[p...i-1]作为“已处理区间”，A[i...r-1] 作为未处理区间
     int i = p;
     for (int j = p; j < r; j++) {
+      if (arr[j] < pivot) {
+        swap(arr, i, j);
+        i++;
+      }
+    }
+    swap(arr, i, r);
+    return i;
+  }
+
+  // 优化快速排序，优化分区点
+  private static int partition2(int[] arr, int p, int r) {
+    // 三数取中法，或者随机取数法
+    int middle = (p + r) / 2;
+    int pivot = arr[middle];
+    // 交换到右边
+    swap(arr, middle, r);
+    int i = p;
+    int j = p;
+    for (; j < r; j++) {
       if (arr[j] < pivot) {
         swap(arr, i, j);
         i++;
