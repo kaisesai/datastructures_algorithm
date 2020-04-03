@@ -8,25 +8,95 @@ import java.util.Arrays;
 public class BinarySearch {
 
   public static void main(String[] args) {
-    int[] a = {3, 6, 9, 11, 15, 15, 22, 35, 30, 40};
+    // int[] a = {3, 6, 9, 11, 15, 15, 22, 35, 30, 40};
+    int[] a = {5, 1, 3};
     System.out.println("数据：" + Arrays.toString(a));
 
-    int value = 19;
+    int value = 5;
     // int index = binarySearch(a, value);
     // int index = binarySearchInternally(a, 0, a.length - 1, value);
     // System.out.println("通过二分查找法，查找元素 value 为 " + value + " 的元素在数组中的位置为：" + index);
 
-    int index = binarySearchForFirstEqValue(a, value);
-    System.out.println("查找第一个值等于" + value + "的元素，索引为：" + index);
+    // int index = binarySearchForFirstEqValue(a, value);
+    // System.out.println("查找第一个值等于" + value + "的元素，索引为：" + index);
 
-    index = binarySearchForLastEqValue(a, value);
-    System.out.println("查找最后一个值等于" + value + "的元素， 索引为" + index);
+    // index = binarySearchForLastEqValue(a, value);
+    // System.out.println("查找最后一个值等于" + value + "的元素， 索引为" + index);
 
-    index = binarySearchForFirstGeValue(a, value);
-    System.out.println("查找第一个值大于等于" + value + "的元素，索引为" + index);
+    // index = binarySearchForFirstGeValue(a, value);
+    // System.out.println("查找第一个值大于等于" + value + "的元素，索引为" + index);
 
-    index = binarySearchForLastLeValue(a, value);
-    System.out.println("查找最后一个小于等于" + value + "的元素，索引为" + index);
+    // index = binarySearchForLastLeValue(a, value);
+    // System.out.println("查找最后一个小于等于" + value + "的元素，索引为" + index);
+
+    int index = binarySearchCirculationArray(a, value);
+    System.out.println("查找循环数组中等于" + value + "的元素，索引为" + index);
+
+  }
+
+  /**
+   * 力扣 33 题
+   * <p>
+   * 假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+   * <p>
+   * ( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+   * <p>
+   * 搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
+   * <p>
+   * 你可以假设数组中不存在重复的元素。
+   * <p>
+   * 你的算法时间复杂度必须是 O(log n) 级别。
+   *
+   * @param a     循环数组
+   * @param value 目标值
+   * @return 给定值在数组中的索引
+   */
+  public static int binarySearchCirculationArray(int[] a, int value) {
+    /*
+    假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+    ( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+
+    搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
+
+    你可以假设数组中不存在重复的元素。
+
+    你的算法时间复杂度必须是 O(log n) 级别。
+     */
+    if (a == null || a.length < 1) {
+      return -1;
+    }
+
+    int low = 0;
+    int high = a.length - 1;
+    while (low <= high) {
+      int mid = low + ((high - low) >> 1);
+      if (a[mid] == value) {
+        return mid;
+      }
+
+      if (a[low] <= a[mid]) {
+        // 前半部分是有序数组，后半部分是循环数组
+        // 如果元素在有序数组中,并且前半部分的头元素小等于 value
+        if (a[mid] > value && a[low] <= value) {
+          high = mid - 1;
+        } else {
+          low = mid + 1;
+        }
+
+      } else {
+        // 前半部分是循环数组，后半部分是有序数组
+        // value 值大于中间值，并且 value 值小于等于末位置
+        if (a[mid] < value && a[high] >= value) {
+          low = mid + 1;
+        } else {
+          high = mid - 1;
+        }
+      }
+
+    }
+
+    return -1;
   }
 
   /**
