@@ -36,6 +36,11 @@ public class BinarySearchTree {
     tree.delete(10);
     printTreeForInOrder(tree);
 
+    // 递归删除
+    tree.deleteForRecursion(tree.root, 1);
+    tree.deleteForRecursion(tree.root, 2);
+    printTreeForInOrder(tree);
+
     // 查找操作
     System.out.println(tree.find(1));
     System.out.println("二叉查找树的最小值：" + tree.findMin());
@@ -173,7 +178,7 @@ public class BinarySearchTree {
   }
 
   /**
-   * 力扣 450. 删除二叉搜索树中的节点
+   * 力扣 450 题 删除二叉搜索树中的节点
    * <p>
    * 删除节点
    *
@@ -232,6 +237,78 @@ public class BinarySearchTree {
     } else {
       pp.left = child;
     }
+  }
+
+  /**
+   * 递归的方法删除节点：删除搜索二叉树中的key对应的节点，并保证二叉搜索树的性质不变
+   *
+   * @param node 二叉搜索树的根节点root
+   * @param key  和一个值key
+   * @return 新二叉搜索的根节点的引用
+   * @see <a href="https://leetcode-cn.com/problems/delete-node-in-a-bst/solution/shan-chu-er-cha-sou-suo-shu-zhong-de-jie-dian-by-l/">力扣 450. 删除二叉搜索树中的节点</a>
+   */
+  public Node deleteForRecursion(Node node, int key) {
+    if (node == null) {
+      return null;
+    }
+
+    // 查找指定的节点
+    if (node.data > key) {
+      // 删除节点在左子树
+      node.left = deleteForRecursion(node.left, key);
+    } else if (node.data < key) {
+      // 删除节点在右子树
+      node.right = deleteForRecursion(node.right, key);
+    } else {
+      // 删除节点等于当前节点
+      // 当前节点是叶子节点
+      if (node.left == null && node.right == null) {
+        node = null;
+      } else if (node.right != null) {
+        // 当前节点有右子树
+        // 寻找它的后继节点值代替它，并且删除
+        node.data = successor(node);
+        node.right = deleteForRecursion(node.right, node.data);
+      } else {
+        // 当前节点只有左子树
+        // 寻找它的前驱节点值代替它，并且删除
+        node.data = predecessor(node);
+        node.left = deleteForRecursion(node.left, node.data);
+      }
+    }
+    return node;
+  }
+
+  /**
+   * 查找前驱节点
+   * <p>
+   * 节点的左子树中最大的一个节点
+   *
+   * @param node 节点
+   * @return 后继节点
+   */
+  private int predecessor(Node node) {
+    Node predecessor = node.left;
+    while (predecessor.right != null) {
+      predecessor = predecessor.right;
+    }
+    return predecessor.data;
+  }
+
+  /**
+   * 查找后继节点
+   * <p>
+   * 节点的右子树中最小的一个节点
+   *
+   * @param node 节点
+   * @return 后继节点
+   */
+  private int successor(Node node) {
+    Node successor = node.right;
+    while (successor.left != null) {
+      successor = successor.left;
+    }
+    return successor.data;
   }
 
   /**
