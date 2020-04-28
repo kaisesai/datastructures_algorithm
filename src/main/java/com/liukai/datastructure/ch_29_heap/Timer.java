@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * 2. 定时器从小顶堆取堆顶任务，判断它的执行时间与当前时间差，如果时间已经到达则执行，如果没有达到则线程阻塞到任务执行时间
  * 3. 直接使用 JDK 的 ScheduledExecutorService 就可以。
  * 4. 不借助堆，在 MyTask 类的 run 方法中，直接设置睡眠延迟时间
- * 5. 借助线程池，多多个任务启动多个线程延迟执行（太鸡肋！）
+ * 5. 借助线程池，多个任务启动多个线程延迟执行（太鸡肋！）
  */
 public class Timer {
 
