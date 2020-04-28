@@ -128,14 +128,14 @@ public class Timer {
     @Override
     public void run() {
       // 这里可以不借助堆，直接让当前线程 sleep 延迟时间
-      long delayTime = getDelayTime(this);
-      if (delayTime > 0) {
-        try {
-          Thread.sleep(delayTime);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
+      // long delayTime = getDelayTime(this);
+      // if (delayTime > 0) {
+      //   try {
+      //     Thread.sleep(delayTime);
+      //   } catch (InterruptedException e) {
+      //     e.printStackTrace();
+      //   }
+      // }
 
       System.out.println("开始执行任务：" + this);
       runnable.run();
