@@ -131,7 +131,6 @@ public class Graph {
    */
   public List<Integer> threeDegreeRelationDfs(int s) {
     // 寻找好友的好友的好友
-    // 采用广度优先搜索算法
     boolean[] visited = new boolean[v];
     visited[s] = true;
     List<Integer> relations = new ArrayList<>();
