@@ -98,6 +98,7 @@ public class Graph {
     while (!queue.isEmpty()) {
       Integer w = queue.poll();
 
+      // 顶点离起始顶点距离超过 3 时则退出
       if (degree[w] == 3) {
         continue;
       }
