@@ -48,8 +48,10 @@ public class Graph {
     graph.addEdge(2, 6);
     graph.addEdge(3, 7);
     graph.addEdge(3, 8);
+    graph.addEdge(4, 9);
     graph.addEdge(4, 10);
     graph.addEdge(10, 11);
+    graph.addEdge(10, 12);
 
     // 广度优先搜索
     System.out.print("广度优先搜索：");
@@ -76,19 +78,17 @@ public class Graph {
    */
   public List<Integer> threeDegreeRelationBfs(int s) {
     // 记录顶点是否被访问
-
     boolean[] visited = new boolean[v];
     visited[s] = true;
-
-    // 记录顶点的前驱顶点
-    int[] prev = new int[v];
-    Arrays.fill(prev, -1);
 
     // 记录访问的顶点
     Queue<Integer> queue = new LinkedList<>();
     queue.add(s);
 
     List<Integer> result = new ArrayList<>();
+
+    // 记录每个顶点到起始顶点的距离
+    int[] degree = new int[v];
 
     // 记录总共遍历的次数
     int cycleNum = 0;
@@ -98,17 +98,7 @@ public class Graph {
     while (!queue.isEmpty()) {
       Integer w = queue.poll();
 
-      // TODO: 2020/5/3 待优化
-      // 求遍历的当前顶点里起始顶点的距离
-      int prevV = prev[w];
-      int level = 1;
-      while (prevV != -1) {
-        prevV = prev[prevV];
-        level++;
-        cycleNum++;
-      }
-      // 当前遍历顶点的层次超过了 3 层，退出循环
-      if (level > 3) {
+      if (degree[w] == 3) {
         continue;
       }
 
@@ -116,13 +106,14 @@ public class Graph {
       for (Integer q : adj[w]) {
         // 没有访问过的顶点进行记录
         if (!visited[q]) {
-          // 记录当前顶点的前驱顶点
-          prev[q] = w;
           visited[q] = true;
+          // 添加到队列
           queue.add(q);
+          // 记录当前顶点到起始顶点的距离，查找其前驱顶点的距离
+          degree[q] = degree[w] + 1;
+          cycleNum++;
           // 记录结果
           result.add(q);
-          cycleNum++;
         }
       }
     }
