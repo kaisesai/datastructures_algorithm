@@ -3,26 +3,32 @@ package com.liukai.datastructure.ch_33_string;
 import java.util.Arrays;
 
 /**
- * 33-1 BM 字符串匹配算法
+ * 33-1 BM 字符串匹配算法<br/>
  * <p>
  * 核心思想：将模式串与主串的匹配过程，看作模式串在主串中不停的往后滑动，当遇到不匹配的字符时往后滑动一定的位数。
  * 这个一定的位数，就是 BM 算法所寻找的规律。
  * <p>
- * BM 算法利用两种规则来计算模式串往后滑动的位数，来进行比较的。
+ * <br/>
+ * BM 算法利用两种规则来计算模式串往后滑动的位数，来进行比较的。<br/>
  * 1. 坏字符规则：将模式串从后往前与主串的字符进行匹配，当遇到不匹配的字符时，这个字符就是坏字符。
- * 然后查找坏字符在模式串中查找其所出现的位置，计算模式串往后滑动的位数。
+ * 然后查找坏字符在模式串中查找其所出现的位置，计算模式串往后滑动的位数。<br/>
+ * <p>
  * 2. 好后缀规则：我们把模式串与主串匹配过程中，默认相同的的字符串叫做好后缀，并记作{u}，我们拿它在模式串中查找。
- * 如果找到了另一个跟{u}相匹配的子串{u*}，我们就将模式串移动到子串{u*}与主串中{u}对齐的位置
+ * 如果找到了另一个跟{u}相匹配的子串{u*}，我们就将模式串移动到子串{u*}与主串中{u}对齐的位置<br/>
  * <p>
- * 坏字符规则的实现：
- * 1. 借助ASCII 码值构建模式串中字符的散列表
- *
+ * <br/>
+ * 坏字符规则的实现：<br/>
  * <p>
- * 好后缀规则的实现：
- * 1. 借助数组 int[] suffix 预处理模式串中公共后缀子串
- * 2. 借助数组 boolean[] prefix 记录公共后缀子串与模式串前缀子串匹配的信息
+ * 1. 借助ASCII 码值构建模式串中字符的散列表<br/>
+ * <p>
+ * <br/>
+ * 好后缀规则的实现：<br/>
+ * <p>
+ * 1. 借助数组 int[] suffix 预处理模式串中公共后缀子串<br/>
+ * <p>
+ * 2. 借助数组 boolean[] prefix 记录公共后缀子串与模式串前缀子串匹配的信息<br/>
  */
-public class BMString {
+public class BM {
 
   /**
    * 模式串字符散列表的容量
@@ -33,8 +39,8 @@ public class BMString {
     String master = "jkjfkdfvowemfiowmiocmkdmffd";
     String b = "ffd";
 
-    BMString bmString = new BMString();
-    int bm = bmString.bm(master.toCharArray(), master.length(), b.toCharArray(), b.length());
+    BM BM = new BM();
+    int bm = BM.bm(master.toCharArray(), master.length(), b.toCharArray(), b.length());
     System.out.println(bm);
   }
 
