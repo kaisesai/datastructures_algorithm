@@ -1,9 +1,6 @@
 package com.liukai.datastructure.ch_35_trie;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * 35-1 Trie 树
@@ -31,8 +28,17 @@ public class Trie {
    */
   private final TrieNode root = new TrieNode('/');
 
+  /**
+   * Trie 树子节点存储方式
+   */
+  private final TrieNodeSTOREType storeType;
+
+  public Trie(TrieNodeSTOREType storeType) {
+    this.storeType = storeType;
+  }
+
   public static void main(String[] args) {
-    Trie trie = new Trie();
+    Trie trie = new Trie(TrieNodeSTOREType.HASH_TABLE);
     trie.insert("hello".toCharArray());
     trie.insert("ho".toCharArray());
     trie.insert("hi".toCharArray());
@@ -40,7 +46,7 @@ public class Trie {
     trie.insert("so".toCharArray());
     trie.insert("see".toCharArray());
 
-    System.out.println(trie.find("he".toCharArray()));
+    System.out.println(trie.find("ho".toCharArray()));
 
     System.out.println(trie.findNotice("h".toCharArray()));
 
@@ -53,13 +59,13 @@ public class Trie {
    */
   public void insert(char[] text) {
     TrieNode p = root;
-    for (int i = 0; i < text.length; i++) {
-      // ASCII 码
-      int index = text[i] - 'a';
-      if (p.children[index] == null) {
-        p.children[index] = new TrieNode(text[i]);
+    for (char c : text) {
+      TrieNode children = p.getChild(c);
+      if (children == null) {
+        p.addChildren(c);
+        // p.children[index] = new TrieNode(text[i]);
       }
-      p = p.children[index];
+      p = p.getChild(c);
     }
     p.isEndingChar = true;
   }
@@ -73,12 +79,13 @@ public class Trie {
   public boolean find(char[] pattern) {
     TrieNode p = root;
     for (int i = 0; i < pattern.length; i++) {
-      int index = pattern[i] - 'a';
-      if (p.children[index] == null) {
+      TrieNode children = p.getChild(pattern[i]);
+      // int index = pattern[i] - 'a';
+      if (children == null) {
         // 没有找到
         return false;
       }
-      p = p.children[index];
+      p = children;
     }
     // 结尾自字符是否为叶子节点
     return p.isEndingChar;
@@ -92,13 +99,14 @@ public class Trie {
    */
   public List<String> findNotice(char[] pattern) {
     TrieNode p = root;
-    for (int i = 0; i < pattern.length; i++) {
-      int index = pattern[i] - 'a';
-      if (p.children[index] == null) {
+    for (char c : pattern) {
+      TrieNode children = p.getChild(c);
+      // int index = pattern[i] - 'a';
+      if (children == null) {
         // 没有找到
         return null;
       }
-      p = p.children[index];
+      p = children;
     }
 
     // 结尾自字符是否为叶子节点
@@ -114,19 +122,35 @@ public class Trie {
     while (!queue.isEmpty()) {
       TrieNode node = queue.poll();
       if (!node.isEndingChar) {
-        for (int i = 0; i < node.children.length; i++) {
-          if (node.children[i] != null) {
-            queue.add(node.children[i]);
-            result.add(prefixStr + node.children[i].data);
+        for (TrieNode children : node.getChildrenForArray()) {
+          if (children != null) {
+            queue.add(children);
+            result.add(prefixStr + children.getData());
           }
         }
+
+        // for (int i = 0; i < node.children.length; i++) {
+        //   if (node.children[i] != null) {
+        //     queue.add(node.children[i]);
+        //     result.add(prefixStr + node.children[i].data);
+        //   }
+        // }
       }
     }
     return result;
 
   }
 
-  static class TrieNode {
+  /**
+   * Trie 树子节点存储类型枚举
+   */
+  enum TrieNodeSTOREType {
+    ARRAY,// 数组映射
+    HASH_TABLE, // 散列表
+    RED_BLACK_TREE// 红黑树
+  }
+
+  class TrieNode {
 
     char data;
 
@@ -135,12 +159,70 @@ public class Trie {
      * <p>
      * 通过 字符- 'a' 的 ASCII 码值与数组下标映射
      */
-    TrieNode[] children = new TrieNode[26];
+    TrieNode[] childrenForArray = new TrieNode[26];
+
+    // 使用散列表存储
+    HashMap<Character, TrieNode> childrenForHashTable = new HashMap<>();
+
+    // 使用红黑树存储
+    TreeMap<Character, TrieNode> childrenForRedBlackTree = new TreeMap<>();
 
     boolean isEndingChar = false;
 
     public TrieNode(char data) {
       this.data = data;
+    }
+
+    public char getData() {
+      return data;
+    }
+
+    public void addChildren(char c) {
+      switch (Trie.this.storeType) {
+        case ARRAY:
+          // 使用数组映射存储
+          childrenForArray[c - 'a'] = new TrieNode(c);
+          return;
+        case HASH_TABLE:
+          // 使用散列表存储
+          childrenForHashTable.put(c, new TrieNode(c));
+          return;
+        case RED_BLACK_TREE:
+          // 使用红黑树存储
+          childrenForRedBlackTree.put(c, new TrieNode(c));
+      }
+    }
+
+    public TrieNode getChild(char c) {
+      switch (Trie.this.storeType) {
+        case ARRAY:
+          // 使用数组映射存储
+          return childrenForArray[c - 'a'];
+        case HASH_TABLE:
+          // 使用散列表存储
+          return childrenForHashTable.get(c);
+        case RED_BLACK_TREE:
+          // 使用红黑树存储
+          return childrenForRedBlackTree.get(c);
+        default:
+          return null;
+      }
+    }
+
+    public Collection<TrieNode> getChildrenForArray() {
+      switch (Trie.this.storeType) {
+        case ARRAY:
+          // 使用数组映射存储
+          return Arrays.asList(childrenForArray);
+        case HASH_TABLE:
+          // 使用散列表存储
+          return childrenForHashTable.values();
+        case RED_BLACK_TREE:
+          // 使用红黑树存储
+          return childrenForRedBlackTree.values();
+        default:
+          return null;
+      }
     }
 
   }
