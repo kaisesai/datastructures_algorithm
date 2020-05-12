@@ -195,19 +195,16 @@ public class Trie {
 
     @Override
     public void addChildren(char c) {
-      // 使用散列表存储
       children.put(c, new TrieNodeForRedBlackTree(c));
     }
 
     @Override
     public TrieNode getChild(char c) {
-      // 使用散列表存储
       return children.get(c);
     }
 
     @Override
     public Collection<TrieNode> getChildren() {
-      // 使用散列表存储
       return children.values();
     }
 
@@ -236,13 +233,11 @@ public class Trie {
 
     @Override
     public TrieNode getChild(char c) {
-      // 使用数组映射存储
       return childrenForArray[c - 'a'];
     }
 
     @Override
     public Collection<TrieNode> getChildren() {
-      // 使用数组映射存储
       return Arrays.asList(childrenForArray);
     }
 
@@ -262,19 +257,16 @@ public class Trie {
 
     @Override
     public void addChildren(char c) {
-      // 使用散列表存储
       children.put(c, new TrieNodeForHashTable(c));
     }
 
     @Override
     public TrieNode getChild(char c) {
-      // 使用散列表存储
       return children.get(c);
     }
 
     @Override
     public Collection<TrieNode> getChildren() {
-      // 使用散列表存储
       return children.values();
     }
 
