@@ -4,22 +4,16 @@ import java.util.*;
 
 /**
  * 35-1 Trie 树
- * <p>
- * 描述：Trie 树是一个字典树，是一种用于处理字符串匹配的数据结构。
- * <p>
- * 核心原理：利用字符串之间的相同公共前缀，将重复的前缀合并在一起。
- * <p>
- * 主要操作：
- * 1. 插入字符串
- * 2. 查找字符串
- * <p>
- * 特点：
- * 1. 构建 Trie 树的时间复杂度是 O(n)，n 为所有的字符串个数的长度之和。
- * 2. 查询的时间复杂度是 O(k)，k 为要查询字符串的长度
- * <p>
- * 适用场景：
- * 1. 与红黑树、散列表相比不适合用于字符串匹配
- * 2. 适用于字符串搜索提示
+ *
+ * <p>描述：Trie 树是一个字典树，是一种用于处理字符串匹配的数据结构。
+ *
+ * <p>核心原理：利用字符串之间的相同公共前缀，将重复的前缀合并在一起。
+ *
+ * <p>主要操作： 1. 插入字符串 2. 查找字符串
+ *
+ * <p>特点： 1. 构建 Trie 树的时间复杂度是 O(n)，n 为所有的字符串个数的长度之和。 2. 查询的时间复杂度是 O(k)，k 为要查询字符串的长度
+ *
+ * <p>适用场景： 1. 与红黑树、散列表相比不适合用于字符串匹配 2. 适用于字符串搜索提示
  */
 public class Trie {
 
@@ -28,9 +22,7 @@ public class Trie {
    */
   private final TrieNodeSTOREType storeType;
 
-  /**
-   * 根节点，存储无意义的字符
-   */
+  /** 根节点，存储无意义的字符 */
   private final TrieNode root;
 
   public Trie(TrieNodeSTOREType storeType) {
@@ -127,11 +119,9 @@ public class Trie {
             result.add(prefixStr + children.getData());
           }
         }
-
       }
     }
     return result;
-
   }
 
   private TrieNode createTrieNode(char c) {
@@ -154,9 +144,9 @@ public class Trie {
    * Trie 树子节点存储类型枚举
    */
   enum TrieNodeSTOREType {
-    ARRAY,// 数组映射
+    ARRAY, // 数组映射
     HASH_TABLE, // 散列表
-    RED_BLACK_TREE// 红黑树
+    RED_BLACK_TREE // 红黑树
   }
 
   abstract static class TrieNode {
@@ -181,9 +171,7 @@ public class Trie {
 
   }
 
-  /**
-   * 红黑树实现的 Trie 树
-   */
+  /** 红黑树实现的 Trie 树 */
   static class TrieNodeForRedBlackTree extends TrieNode {
 
     // 使用红黑树存储
@@ -210,15 +198,13 @@ public class Trie {
 
   }
 
-  /**
-   * 数组映射表实现的 Trie 树
-   */
+  /** 数组映射表实现的 Trie 树 */
   static class TrieNodeForArray extends TrieNode {
 
     /**
      * 数组，字符与数组下标映射
-     * <p>
-     * 通过 字符- 'a' 的 ASCII 码值与数组下标映射
+     *
+     * <p>通过 字符- 'a' 的 ASCII 码值与数组下标映射
      */
     TrieNode[] childrenForArray = new TrieNodeForArray[26];
 
@@ -243,9 +229,7 @@ public class Trie {
 
   }
 
-  /**
-   * 散列表实现的 Trie 树
-   */
+  /** 散列表实现的 Trie 树 */
   static class TrieNodeForHashTable extends TrieNode {
 
     // 使用散列表存储
@@ -269,7 +253,5 @@ public class Trie {
     public Collection<TrieNode> getChildren() {
       return children.values();
     }
-
   }
-
 }
