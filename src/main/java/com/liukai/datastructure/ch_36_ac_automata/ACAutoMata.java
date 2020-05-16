@@ -56,22 +56,46 @@ public class ACAutoMata {
   }
 
   /**
-   * 构建 Trie 树——插入模式串
+   * 匹配字符串
    *
-   * @param word 模式串
+   * @param text 主串
    */
-  public void insert(char[] word) {
-    // 遍历模式串的每个字符，从根节点开始寻找，将其插入到 Trie 树中合适的位置
+  public boolean match(char[] text) {
+    // 主串从索引 0 开始遍历
+    int n = text.length;
+    // Trie 树重根节点开始查找
+    boolean result = false;
     AcNode p = root;
-    for (char c : word) {
-      AcNode child = p.getChild(c);
-      if (child == null) {
-        p.addChildren(c);
+    for (int i = 0; i < n; i++) {
+      while (p.getChild(text[i]) == null && p != root) {
+        // 失败指针发挥作用的地方
+        // 说明，Trie 树中的一个模式串已经发生了不匹配，从而提前结束，快速移动到下一个模式串中
+        p = p.fail;
       }
-      p = p.getChild(c);
+
+      p = p.getChild(text[i]);
+      if (p == null) {
+        // 没有匹配，从 root 开始重新匹配
+        p = root;
+      }
+
+      AcNode tmp = p;
+      // 打印匹配到的字符
+      while (tmp != root) {
+        // 失败指针是皆为字符串,说明是这个模式串从
+        if (tmp.isEndingChar) {
+          int pos = i - tmp.length + 1;
+          System.out.println("匹配的起始下标 " + pos + "；长度" + tmp.length + "，字符串为：" + String
+            .valueOf(text, pos, tmp.length));
+          if (!result) {
+            result = true;
+          }
+        }
+        tmp = tmp.fail;
+      }
+
     }
-    p.isEndingChar = true;
-    p.length = word.length;
+    return result;
   }
 
   /**
@@ -112,46 +136,22 @@ public class ACAutoMata {
   }
 
   /**
-   * 匹配字符串
+   * 构建 Trie 树——插入模式串
    *
-   * @param text 主串
+   * @param word 模式串
    */
-  public boolean match(char[] text) {
-    // 主串从索引 0 开始遍历
-    int n = text.length;
-    // Trie 树重根节点开始查找
-    boolean result = false;
+  public void insert(char[] word) {
+    // 遍历模式串的每个字符，从根节点开始寻找，将其插入到 Trie 树中合适的位置
     AcNode p = root;
-    for (int i = 0; i < n; i++) {
-      while (p.getChild(text[i]) == null && p != root) {
-        // 失败指针发挥作用的地方
-        // 说明，Trie 树中的一个模式串已经不匹配提前结束，快速移动到下一个模式串中
-        p = p.fail;
+    for (char c : word) {
+      AcNode child = p.getChild(c);
+      if (child == null) {
+        p.addChildren(c);
       }
-
-      p = p.getChild(text[i]);
-      if (p == null) {
-        // 没有匹配，从 root 开始重新匹配
-        p = root;
-      }
-
-      AcNode tmp = p;
-      // 打印匹配到的字符
-      while (tmp != root) {
-        // 失败指针是皆为字符串,说明是这个模式串从
-        if (tmp.isEndingChar) {
-          int pos = i - tmp.length + 1;
-          System.out.println("匹配的起始下标 " + pos + "；长度" + tmp.length + "，字符串为：" + String
-            .valueOf(text, pos, tmp.length));
-          if (!result) {
-            result = true;
-          }
-        }
-        tmp = tmp.fail;
-      }
-
+      p = p.getChild(c);
     }
-    return result;
+    p.isEndingChar = true;
+    p.length = word.length;
   }
 
   /**
