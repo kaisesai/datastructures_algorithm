@@ -22,7 +22,9 @@ public class Trie {
    */
   private final TrieNodeSTOREType storeType;
 
-  /** 根节点，存储无意义的字符 */
+  /**
+   * 根节点，存储无意义的字符
+   */
   private final TrieNode root;
 
   public Trie(TrieNodeSTOREType storeType) {
@@ -71,8 +73,8 @@ public class Trie {
    */
   public boolean find(char[] pattern) {
     TrieNode p = root;
-    for (int i = 0; i < pattern.length; i++) {
-      TrieNode children = p.getChild(pattern[i]);
+    for (char c : pattern) {
+      TrieNode children = p.getChild(c);
       if (children == null) {
         // 没有找到
         return false;
@@ -149,7 +151,7 @@ public class Trie {
     RED_BLACK_TREE // 红黑树
   }
 
-  abstract static class TrieNode {
+  public abstract static class TrieNode {
 
     char data;
 
@@ -171,8 +173,10 @@ public class Trie {
 
   }
 
-  /** 红黑树实现的 Trie 树 */
-  static class TrieNodeForRedBlackTree extends TrieNode {
+  /**
+   * 红黑树实现的 Trie 树
+   */
+  public static class TrieNodeForRedBlackTree extends TrieNode {
 
     // 使用红黑树存储
     TreeMap<Character, TrieNode> children = new TreeMap<>();
@@ -198,8 +202,10 @@ public class Trie {
 
   }
 
-  /** 数组映射表实现的 Trie 树 */
-  static class TrieNodeForArray extends TrieNode {
+  /**
+   * 数组映射表实现的 Trie 树
+   */
+  public static class TrieNodeForArray extends TrieNode {
 
     /**
      * 数组，字符与数组下标映射
@@ -229,8 +235,10 @@ public class Trie {
 
   }
 
-  /** 散列表实现的 Trie 树 */
-  static class TrieNodeForHashTable extends TrieNode {
+  /**
+   * 散列表实现的 Trie 树
+   */
+  public static class TrieNodeForHashTable extends TrieNode {
 
     // 使用散列表存储
     HashMap<Character, TrieNode> children = new HashMap<>();
@@ -253,5 +261,7 @@ public class Trie {
     public Collection<TrieNode> getChildren() {
       return children.values();
     }
+
   }
+
 }
