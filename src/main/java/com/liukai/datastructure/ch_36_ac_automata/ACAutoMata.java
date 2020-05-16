@@ -1,9 +1,6 @@
 package com.liukai.datastructure.ch_36_ac_automata;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * 36-1 AC 自动机
@@ -33,17 +30,20 @@ public class ACAutoMata {
 
   public static void main(String[] args) {
     String[] patterns = {"at", "art", "oars", "soar"};
-    String text = "soarsoars";
-    System.out.println("字符串：" + text);
-    System.out.println(match(text, patterns));
+    // String text = "soarsoars";
+    String text = "soarat123ddddeedfefoarsoars";
+    char[] chars = text.toCharArray();
+    System.out.println("原始字符串：" + text);
+    System.out.println(match(chars, patterns));
+    System.out.println("替换后的字符串：" + String.valueOf(chars));
 
-    String[] patterns2 = {"Fxtec Pro1", "谷歌Pixel"};
-    String text2
-      = "一家总部位于伦敦的公司Fxtex在MWC上就推出了一款名为Fxtec Pro1的手机，该机最大的亮点就是采用了侧滑式全键盘设计。DxOMark年度总榜发布 华为P20 Pro/谷歌Pixel 3争冠";
-    System.out.println(match(text2, patterns2));
+    // String[] patterns2 = {"Fxtec Pro1", "谷歌Pixel"};
+    // String text2
+    //   = "一家总部位于伦敦的公司Fxtex在MWC上就推出了一款名为Fxtec Pro1的手机，该机最大的亮点就是采用了侧滑式全键盘设计。DxOMark年度总榜发布 华为P20 Pro/谷歌Pixel 3争冠";
+    // System.out.println(match(text2, patterns2));
   }
 
-  public static boolean match(String text, String[] patterns) {
+  public static boolean match(char[] text, String[] patterns) {
     ACAutoMata acAutoMata = new ACAutoMata();
     // 构建 Trie 树
     for (String pattern : patterns) {
@@ -52,7 +52,7 @@ public class ACAutoMata {
     // 构建失败指针
     acAutoMata.buildFailurePointer();
 
-    return acAutoMata.match(text.toCharArray());
+    return acAutoMata.match(text);
   }
 
   /**
@@ -65,6 +65,9 @@ public class ACAutoMata {
     int n = text.length;
     // Trie 树重根节点开始查找
     boolean result = false;
+
+    HashMap<Integer, Integer> matchedMap = new HashMap<>();
+
     AcNode p = root;
     for (int i = 0; i < n; i++) {
       while (p.getChild(text[i]) == null && p != root) {
@@ -84,9 +87,11 @@ public class ACAutoMata {
       while (tmp != root) {
         // 失败指针是皆为字符串,说明是这个模式串从
         if (tmp.isEndingChar) {
+          // 当前索引减去匹配的模式串的长度
           int pos = i - tmp.length + 1;
           System.out.println("匹配的起始下标 " + pos + "；长度" + tmp.length + "，字符串为：" + String
             .valueOf(text, pos, tmp.length));
+          matchedMap.put(pos, tmp.length);
           if (!result) {
             result = true;
           }
@@ -95,6 +100,14 @@ public class ACAutoMata {
       }
 
     }
+
+    // 替换字符串为 *** 号
+    for (Map.Entry<Integer, Integer> entry : matchedMap.entrySet()) {
+      for (int i1 = entry.getKey(); i1 < entry.getValue() + entry.getKey(); i1++) {
+        text[i1] = '*';
+      }
+    }
+
     return result;
   }
 
