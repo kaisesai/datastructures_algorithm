@@ -169,34 +169,6 @@ public class HuffmanCode {
       return;
     }
 
-    // 构建霍夫曼编码表
-    // 通过借助 队列遍历，广度优先搜索
-    // Queue<Node> queue = new LinkedList<>();
-    // queue.add(root);
-    //
-    // StringBuilder sb = new StringBuilder();
-    // while (!queue.isEmpty()) {
-    //   Node node = queue.poll();
-    //   // 一层一层的遍历
-    //
-    //   if (node.left == null && node.right == null) {
-    //     // 没有左右子节点
-    //     charCodeMap.put(node.data, sb.toString() + node.sideWeight);
-    //     continue;
-    //   }
-    //
-    //   if (node.left != null && node.right != null) {
-    //     // 左右子节点都有的情况
-    //     queue.add(node.left);
-    //     queue.add(node.right);
-    //
-    //   }else if(node.left == null){
-    //     // 只有右子节点
-    //     queue.add(node.right);
-    //     sb.append("0");
-    //   }
-    // }
-
     // 深度优先。前序递归遍历
     preOrder(root, "", charCodeMap);
 
