@@ -77,9 +77,9 @@ public class HuffmanCode {
   }
 
   /**
-   * 压缩字符串
+   * 解压字符串
    *
-   * @return 返回压缩的编码
+   * @return 返回解压的字符串
    */
   public String decompression(String compressStr) {
     StringBuilder sb = new StringBuilder();
